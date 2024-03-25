@@ -94,7 +94,7 @@
 
        \vspace{0.2in}
 
-       Reference Manual (0.9.3)
+       Reference Manual (0.9.9)
 
        \vspace{0.2in}
 
@@ -106,7 +106,7 @@
 
        \rmfamily
 
-       Copyright \textcopyright 2018-2023 vit9696
+       Copyright \textcopyright 2018-2024 vit9696
 
    \end{center}
 \end{titlepage}
@@ -1611,6 +1611,47 @@ To view their current state, use the \texttt{pmset -g} command in Terminal.
   Refer to the \texttt{OCABC: MAT support is 1/0} log entry to determine whether MAT is supported.
 
 \item
+  \texttt{FixupAppleEfiImages}\\
+  \textbf{Type}: \texttt{plist\ boolean}\\
+  \textbf{Failsafe}: \texttt{false}\\
+  \textbf{Description}: Fix errors in early Mac OS X boot.efi images.
+
+  Modern secure PE loaders will refuse to load \texttt{boot.efi} images from
+  macOS 10.4 to 10.12 due to these files containing \texttt{W\^{}X} errors
+  (in all versions) and illegal overlapping sections (in 10.4 and 10.5 32-bit
+  versions only).
+
+  This quirk detects these issues and pre-processes such images in memory,
+  so that a modern loader will accept them.
+
+  Pre-processing in memory is incompatible with secure boot, as the image loaded
+  is not the image on disk, so you cannot sign files which are loaded in this way
+  based on their original disk image contents.
+  Certain firmware will offer to register the hash of new, unknown images - this would
+  still work. On the other hand, it is not particularly realistic to want to
+  start these early, insecure images with secure boot anyway.
+
+  \emph{Note 1}: The quirk is never applied during the Apple secure boot path for
+  newer macOS. The Apple secure boot path includes its own separate mitigations
+  for \texttt{boot.efi} \texttt{W\^{}X} issues.
+
+  \emph{Note 2}: When enabled, and when not processing for Apple secure boot, this quirk
+  is applied to:
+    \begin{itemize}
+      \tightlist
+      \item All images from Apple Fat binaries (32-bit and 64-bit versions in one image).
+      \item All Apple-signed images.
+      \item All images at
+      \texttt{\textbackslash System\textbackslash Library\textbackslash CoreServices\textbackslash boot.efi}
+      within their filesystem.
+    \end{itemize}
+
+  \emph{Note 3}: This quirk is needed for macOS 10.4 to 10.12 (and
+  higher, if Apple secure boot is not enabled), but only when the firmware
+  itself includes a modern, more secure PE COFF image loader. This applies to
+  current builds of OpenDuet, and to OVMF if built from audk source code.
+
+\item
   \texttt{ForceBooterSignature}\\
   \textbf{Type}: \texttt{plist\ boolean}\\
   \textbf{Failsafe}: \texttt{false}\\
@@ -1684,7 +1725,7 @@ To view their current state, use the \texttt{pmset -g} command in Terminal.
   such as \texttt{DevirtualiseMmio}, \texttt{ProtectMemoryRegions}, or \texttt{RebuildAppleMemoryMap},
   and may also obstruct other quirks depending on the scope of such.
 
-  GRUB shim makes similar on-the-fly changes to various UEFI image services,
+  GRUB Shim makes similar on-the-fly changes to various UEFI image services,
   which are also protected against by this quirk.
 
   \emph{Note 1}: On VMware, the need for this quirk may be determined by the appearance of the
@@ -3012,15 +3053,17 @@ to install and troubleshoot such macOS installations.
       \texttt{x86\_64}, \texttt{i386}, \texttt{i386-user32}.
   \end{enumerate}
 
-  Unlike macOS~10.7 (where certain board identifiers are treated as the \texttt{i386}
+  Unlike macOS~10.7 (where certain board identifiers are treated as \texttt{i386}
   only machines), and macOS~10.5 or earlier (where \texttt{x86\_64} is not supported
   by the macOS kernel), macOS~10.6 is very special. The architecture choice on macOS~10.6
   depends on many factors including not only the board identifier, but also the macOS
   product type (client vs server), macOS point release, and amount of RAM. The detection
   of all these is complicated and impractical, as several point releases had implementation
   flaws resulting in a failure to properly execute the server detection in the first place.
-  For this reason, OpenCore on macOS~10.6 falls back on the \texttt{x86\_64}
-  architecture whenever it is supported by the board, as it is on macOS~10.7.
+  For this reason when \texttt{Auto} is set, OpenCore on macOS~10.6 falls back
+  to the \texttt{x86\_64} architecture when it is supported by the board, as
+  on macOS~10.7. The 32-bit \texttt{KernelArch} options can still be configured
+  explicitly however.
 
   A 64-bit Mac model compatibility matrix corresponding to actual
   EfiBoot behaviour on macOS 10.6.8 and 10.7.5 is outlined below.
@@ -3125,6 +3168,8 @@ installed on the media, while alternate options represent recovery options for t
 \end{itemize} \medskip
 \end{itemize}
 
+\subsubsection{Boot Algorithm}\label{bootalgorithm}
+
 The algorithm to determine boot options behaves as follows:
 
 \begin{enumerate}
@@ -3145,13 +3190,15 @@ The algorithm to determine boot options behaves as follows:
   \item For disk device paths (not specifying a bootloader), execute ``bless'' (may return > 1 entry).
   \item For file device paths, check for presence on the file system directly.
   % Just kill all \EFI\APPLE\ paths.
-  \item Exclude entries if there is a \texttt{.contentVisibility} file near the bootloader or
-  inside the boot directory with \texttt{Disabled} contents (ASCII).
+  \item Exclude entries if there is a \texttt{.contentVisibility} file at a relevant location (see below)
+  with \texttt{Disabled} contents (ASCII) (and if the current \texttt{InstanceIentifier} matches an \texttt{Instance-List}
+  if present, see below).
   \item Mark device handle as \textit{used} in the list of partition handles if any.
   % Each partition handle will basically have a list of boot option entries for later quick lookup.
   \item Register the resulting entries as primary options and determine their types. \\
   The option will become auxiliary for some types (e.g. Apple HFS recovery)
-  or if its \texttt{.contentVisibility} file contains \texttt{Auxiliary}.
+  or if its \texttt{.contentVisibility} file contains \texttt{Auxiliary} (and if the current
+  \texttt{InstanceIentifier} matches an \texttt{Instance-List} if present, see below).
   \end{itemize}
 \item For each partition handle:
   \begin{itemize}
@@ -3165,14 +3212,51 @@ The algorithm to determine boot options behaves as follows:
   \item Lookup alternate entries by ``bless'' recovery option list retrieval and predefined paths.
   \item Register the resulting entries as alternate auxiliary options and determine their types if found.
   \end{itemize}
-\item Custom entries and tools, except such pre-constructed previously, are added as primary options without any checks with respect to \texttt{Auxiliary}.
+\item Custom entries and tools, except such pre-constructed previously, are added as primary options
+without any checks with respect to \texttt{Auxiliary}.
 \item System entries, such as \texttt{Reset NVRAM}, are added as primary auxiliary options.
 \end{enumerate}
+
+A \texttt{.contentVisibility} file may be placed next to the bootloader (such as \texttt{boot.efi}),
+or in the boot folder (for DMG folder based boot items). Example locations, as seen from within macOS, are:
+\begin{itemize}
+\tightlist
+\item \texttt{/System/Volumes/Preboot/\{GUID\}/System/Library/CoreServices/.contentVisibility}
+\item \texttt{/Volumes/\{ESP\}/EFI/BOOT/.contentVisibility}
+\end{itemize}
+In addition a \texttt{.contentVisibility} file may be placed in the instance-specific (for macOS) or absolute
+root folders related to a boot entry, for example:
+\begin{itemize}
+\tightlist
+\item \texttt{/System/Volumes/Preboot/\{GUID\}/.contentVisibility}
+\item \texttt{/System/Volumes/Preboot/.contentVisibility}
+\item \texttt{/Volumes/\{ESP\}/.contentVisibility} (\emph{not recommended})
+\end{itemize}
+These root folder locations are supported specifically for macOS, because non-Apple files next to the Apple bootloader
+are removed by macOS updates. It is supported but not recommended to place a \texttt{.contentVisibility} file in a
+non-macOS root location (such as the last location shown above), because it will hide all entries on the drive.
+
+The \texttt{.contentVisibility} file, when present, may optionally target only specific instances
+of OpenCore. Its contents are \texttt{[\{Instance-List\}:](Disabled|Auxiliary)}.
+If a colon (\texttt{:}) is present, the preceding \texttt{Instance-List} it is a comma separated
+list of \texttt{InstanceIdentifier} values (example: \texttt{OCA,OCB:Disabled}).
+When this list is present, the specified visibility is only applied if the
+\texttt{InstanceIdentifier} of the current instance of OpenCore is present in the list.
+When the list is not present, the specified visibility is applied for all instances of OpenCore.
+
+\emph{Note 1}: For any instance of OpenCore with no \texttt{InstanceIdentifier} value, the specified visibility
+from a \texttt{.contentVisibility} file with an \texttt{Instance-List} will never be applied.
+
+\emph{Note 2}: Visibilities with a visibility list will be treated as invalid, and so ignored, in earlier
+versions of OpenCore - which may be useful when comparing behaviour of older and newer versions.
+
+\emph{Note 3}: Avoid extraneous spaces in the \texttt{.contentVisibility} file: these will not be treated as
+whitespace, but as part of the adjacent token.
 
 The display order of the boot options in the OpenCore picker and the boot process
 are determined separately from the scanning algorithm.
 
-The display order as follows:
+The display order is as follows:
 
 \begin{itemize}
 \tightlist
@@ -3391,6 +3475,17 @@ the default boot entry choice will remain changed until the next manual reconfig
   To display all entries, the picker menu can be reloaded into ``Extended Mode'' by pressing the
   \texttt{Spacebar} key. Hiding auxiliary entries may increase boot performance on multi-disk systems.
 
+
+\item
+  \texttt{InstanceIdentifier}\\
+  \textbf{Type}: \texttt{plist\ string}\\
+  \textbf{Failsafe}: Empty\\
+  \textbf{Description}: An optional identifier for the current instance of OpenCore.
+
+  This should typically be a short alphanumeric string. The current use of this value is
+  to optionally target \texttt{.contentVisibility} files to specific instances of OpenCore,
+  as explained in the \hyperref[bootalgorithm]{Boot Algorithm} section.
+
 \item
   \texttt{LauncherOption}\\
   \textbf{Type}: \texttt{plist\ string}\\
@@ -3598,6 +3693,16 @@ the default boot entry choice will remain changed until the next manual reconfig
       \item A list of recommended flavours is provided in \texttt{Docs/Flavours.md}.
     \end{itemize}
     \medskip
+  \item \texttt{0x0100} --- \texttt{OC\_ATTR\_USE\_REVERSED\_UI}, reverse position of Shutdown and
+  Restart buttons, affects OpenCanopy and builtin picker. The reversed setting matches older macOS,
+  and since it was the previous default in OpenCore it may better match some custom backgrounds.
+  Only applicable when \texttt{OC\_ATTR\_USE\_MINIMAL\_UI} is not set.
+  \item \texttt{0x0200} --- \texttt{OC\_ATTR\_REDUCE\_MOTION}, reduce password and menu animation
+  in \texttt{OpenCanopy}, leaving only animations which communicate information not otherwise
+  provided.
+
+  \emph{Note}: These same animations, plus additional animations whose information is provided
+  by voice-over, are automatically disabled when \texttt{PickerAudioAssist} is enabled.
   \end{itemize}
 
 \item
@@ -4000,6 +4105,7 @@ nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:boot-log |
   \item \texttt{OCRST} --- ResetSystem
   \item \texttt{OCUI} --- OpenCanopy
   \item \texttt{OC} --- OpenCore main, also OcMainLib
+  \item \texttt{OLB} --- OpenLegacyBoot
   \item \texttt{VMOPT} --- VerifyMemOpt
   \end{itemize}
 
@@ -5117,7 +5223,7 @@ troubleshooting:
 
   \begin{itemize}
   \item \texttt{boot-save-log=VALUE} --- debug log save mode for normal boot.
-  	\begin{itemize}
+    \begin{itemize}
     \item \texttt{0}
     \item \texttt{1}
     \item \texttt{2} --- (default).
@@ -5125,7 +5231,7 @@ troubleshooting:
     \item \texttt{4} --- (save to file).
     \end{itemize}
   \item \texttt{wake-save-log=VALUE} --- debug log save mode for hibernation wake.
-  	\begin{itemize}
+    \begin{itemize}
     \item \texttt{0} --- disabled.
     \item \texttt{1}
     \item \texttt{2} --- (default).
@@ -6407,6 +6513,10 @@ even cause permanent firmware damage. Some of the known drivers are listed below
 \href{https://github.com/acidanthera/OcBinaryData}{\texttt{ext4\_x64}}
 & Open source EXT4 file system driver, required for booting with \hyperref[uefilinux]{OpenLinuxBoot}
   from the file system most commonly used with Linux. \\
+\href{https://github.com/acidanthera/OpenCorePkg}{\texttt{FirmwareSettings}}\textbf{*}
+& \hyperref[firmwaresettings]{OpenCore plugin} implementing \texttt{OC\_BOOT\_ENTRY\_PROTOCOL}
+  to add an entry to the boot picker menu which reboots into UEFI firmware settings,
+  when this is supported by the firmware. \\
 \href{https://github.com/acidanthera/OcBinaryData}{\texttt{HfsPlus}}
 & Recommended. Proprietary HFS file system driver with bless support commonly found in Apple
   firmware. For Sandy Bridge and earlier CPUs, the \texttt{HfsPlusLegacy} driver should be
@@ -6429,9 +6539,13 @@ even cause permanent firmware damage. Some of the known drivers are listed below
 & \hyperref[ueficanopy]{OpenCore plugin} implementing graphical interface. \\
 \href{https://github.com/acidanthera/OpenCorePkg}{\texttt{OpenRuntime}}\textbf{*}
 & \hyperref[uefiruntime]{OpenCore plugin} implementing \texttt{OC\_FIRMWARE\_RUNTIME} protocol. \\
+\href{https://github.com/acidanthera/OpenCorePkg}{\texttt{OpenLegacyBoot}}\textbf{*}
+& \hyperref[legacyboot]{OpenCore plugin} implementing \texttt{OC\_BOOT\_ENTRY\_PROTOCOL}
+  to allow detection and booting of legacy operating systems from OpenCore on Macs, OpenDuet
+  and systems with a CSM. \\
 \href{https://github.com/acidanthera/OpenCorePkg}{\texttt{OpenLinuxBoot}}\textbf{*}
 & \hyperref[uefilinux]{OpenCore plugin} implementing \texttt{OC\_BOOT\_ENTRY\_PROTOCOL}
-  to allow direct detection and booting of Linux distributiuons from OpenCore, without
+  to allow direct detection and booting of Linux distributions from OpenCore, without
   chainloading via GRUB. \\
 \href{https://github.com/acidanthera/OpenCorePkg}{\texttt{OpenNtfsDxe}}\textbf{*}
 & New Technologies File System (NTFS) read-only driver.
@@ -6623,6 +6737,7 @@ Full list of labels is provided below. All labels are mandatory.
   \item \texttt{SIPDisabled} --- Toggle SIP tool with SIP disabled.
   \item \texttt{SIPEnabled} --- Toggle SIP tool with SIP enabled.
   \item \texttt{Shell} --- Entry with UEFI Shell name (e.g. \texttt{OpenShell}).
+  \item \texttt{FirmwareSettings} --- Firmware settings menu entry.
   \item \texttt{Tool} --- Any other tool.
 \end{itemize}
 
@@ -6653,6 +6768,41 @@ functioning. Feature highlights:
   an untrusted operating system (e.g. \texttt{DisableVariableWrite}).
   \item UEFI Runtime Services memory protection management to workaround read-only
   mapping (e.g. \texttt{EnableWriteUnprotector}).
+\end{itemize}
+
+\subsection{OpenLegacyBoot}\label{legacyboot}
+OpenLegacyBoot is an OpenCore plugin implementing \texttt{OC\_BOOT\_ENTRY\_PROTOCOL}.
+It aims to detect and boot legacy installed operating systems on supported systems, such as
+OpenDuet and Mac models capable of legacy booting.
+
+Usage:
+
+\begin{itemize}
+\tightlist
+  \item Add \texttt{OpenLegacyBoot.efi} and also optionally (see below) \texttt{OpenNtfsDxe.efi} to the \texttt{config.plist}
+  \texttt{Drivers} section.
+  \item Install Windows or another legacy operating system as normal if this has not been done earlier -- OpenLegacyBoot is
+  not involved in this stage and may be unable to boot from installation media such as a USB device.
+  \item Reboot into OpenCore: the installed legacy operating system should appear and boot directly from OpenCore
+  when selected.
+\end{itemize}
+
+OpenLegacyBoot does not require any additional filesystem drivers such as \texttt{OpenNtfsDxe.efi} to be loaded for
+base functionality, but loading them will enable the use of \texttt{.contentDetails} and \texttt{.VolumeIcon.icns}
+files for boot entry customisation.
+
+\subsubsection{Configuration}
+
+No additional configuration should work well in most circumstances, but if required the following
+options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
+
+\begin{itemize}
+  \tightlist
+  \item \texttt{-{}-hide-devices} - String value, no default. \medskip
+
+  When this option is present and has one or more values separated by semicolons \\
+  (e.g. -{}-hide-devices=PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)/HD(2,GPT,...)),
+  it disables scanning the specified disks for legacy operating system boot sectors.\medskip
 \end{itemize}
 
 \subsection{OpenLinuxBoot}\label{uefilinux}
@@ -6723,9 +6873,9 @@ Note however that the following differences are normal and do not need to be fix
   as distro boots successfully.
 \end{itemize}
 
-If using OpenLinuxBoot with Secure Boot, users may wish to use the \texttt{shim-to-cert.tool} included in OpenCore
-utilities, which can be used to extract the public key needed to boot a distro's kernels directly, as done when using OpenCore
-with OpenLinuxBoot, rather than via GRUB shim. For non-GRUB distros, the required public key must be found by user research.
+If using OpenLinuxBoot with Secure Boot, users may wish to install
+a user built, user signed Shim bootloader giving SBAT and MOK integration, as explained in
+\href{https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/ShimUtils}{OpenCore ShimUtils}.
 
 \subsubsection{Configuration}
 
@@ -6734,7 +6884,7 @@ options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
 
 \begin{itemize}
 \tightlist
-	\item \texttt{flags} - Default: all flags are set except the following:
+  \item \texttt{flags} - Default: all flags are set except the following:
   \begin{itemize}
   \tightlist
     \item \texttt{LINUX\_BOOT\_ADD\_RW},
@@ -6743,7 +6893,7 @@ options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
   \end{itemize}
   \medskip
 
-	Available flags are: \medskip
+  Available flags are: \medskip
 
   \begin{itemize}
   \tightlist
@@ -6751,43 +6901,43 @@ options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
     Allows scanning for entries on EFI System Partition.
     \item \texttt{0x00000002} (bit \texttt{1}) --- \texttt{LINUX\_BOOT\_SCAN\_XBOOTLDR},
     Allows scanning for entries on Extended Boot Loader Partition.
-	  \item \texttt{0x00000004} (bit \texttt{2}) --- \texttt{LINUX\_BOOT\_SCAN\_LINUX\_ROOT},
-	  Allows scanning for entries on Linux Root filesystems.
-	  \item \texttt{0x00000008} (bit \texttt{3}) --- \texttt{LINUX\_BOOT\_SCAN\_LINUX\_DATA},
-	  Allows scanning for entries on Linux Data filesystems.
-	  \item \texttt{0x00000080} (bit \texttt{7}) --- \texttt{LINUX\_BOOT\_SCAN\_OTHER},
-	  Allows scanning for entries on file systems not matched by any of the above. \medskip
+    \item \texttt{0x00000004} (bit \texttt{2}) --- \texttt{LINUX\_BOOT\_SCAN\_LINUX\_ROOT},
+    Allows scanning for entries on Linux Root filesystems.
+    \item \texttt{0x00000008} (bit \texttt{3}) --- \texttt{LINUX\_BOOT\_SCAN\_LINUX\_DATA},
+    Allows scanning for entries on Linux Data filesystems.
+    \item \texttt{0x00000080} (bit \texttt{7}) --- \texttt{LINUX\_BOOT\_SCAN\_OTHER},
+    Allows scanning for entries on file systems not matched by any of the above. \medskip
 
-	  The following notes apply to all of the above options: \medskip
+    The following notes apply to all of the above options: \medskip
 
-	  \emph{Note 1}: Apple filesystems APFS and HFS are never scanned.
+    \emph{Note 1}: Apple filesystems APFS and HFS are never scanned.
     \medskip
 
-	  \emph{Note 2}: Regardless of the above flags, a file system must first be
-	  allowed by \texttt{Misc/Security/ScanPolicy} before it can be seen by
+    \emph{Note 2}: Regardless of the above flags, a file system must first be
+    allowed by \texttt{Misc/Security/ScanPolicy} before it can be seen by
     OpenLinuxBoot or any other \texttt{OC\_BOOT\_ENTRY\_PROTOCOL} driver.
     \medskip
 
-	  \emph{Note 3}: It is recommended to enable scanning \texttt{LINUX\_ROOT} and \texttt{LINUX\_DATA}
+    \emph{Note 3}: It is recommended to enable scanning \texttt{LINUX\_ROOT} and \texttt{LINUX\_DATA}
     in both OpenLinuxBoot flags and \texttt{Misc/Security/ScanPolicy} in order to be sure to detect
     all valid Linux installs, since Linux boot filesystems are very often marked as \texttt{LINUX\_DATA}.
     \medskip
 
-	  \item \texttt{0x00000100} (bit \texttt{8}) --- \texttt{LINUX\_BOOT\_ALLOW\_AUTODETECT},
-	  If set allows autodetecting and linking \texttt{vmlinuz*} and \texttt{init*} ramdisk files
-	  when \texttt{loader/entries} files are not found.
-	  \item \texttt{0x00000200} (bit \texttt{9}) --- \texttt{LINUX\_BOOT\_USE\_LATEST},
-	  When a Linux entry generated by OpenLinuxBoot is selected as the default boot entry
+    \item \texttt{0x00000100} (bit \texttt{8}) --- \texttt{LINUX\_BOOT\_ALLOW\_AUTODETECT},
+    If set allows autodetecting and linking \texttt{vmlinuz*} and \texttt{init*} ramdisk files
+    when \texttt{loader/entries} files are not found.
+    \item \texttt{0x00000200} (bit \texttt{9}) --- \texttt{LINUX\_BOOT\_USE\_LATEST},
+    When a Linux entry generated by OpenLinuxBoot is selected as the default boot entry
     in OpenCore, automatically switch to the latest kernel when a new version is installed. \medskip
 
-	  When this option is set, an internal menu entry id is shared between kernel versions from the same install
+    When this option is set, an internal menu entry id is shared between kernel versions from the same install
     of Linux. Linux boot options are always sorted highest kernel version first, so this means that
     the latest kernel version of the same install always shows as the default, with this option set. \medskip
 
-	  \emph{Note}: This option is recommended on all systems. \medskip
+    \emph{Note}: This option is recommended on all systems. \medskip
 
-	  \item \texttt{0x00000400} (bit \texttt{10}) --- \texttt{LINUX\_BOOT\_ADD\_RO},
-	  This option applies to autodetected Linux only (i.e. not to BLSpec or
+    \item \texttt{0x00000400} (bit \texttt{10}) --- \texttt{LINUX\_BOOT\_ADD\_RO},
+    This option applies to autodetected Linux only (i.e. not to BLSpec or
     Fedora-style distributions which have \texttt{/loader/entries/*.conf} files).
     Some distributions run a filesystem check on loading which requires the root
     filesystem to initially be mounted read-only via the \texttt{ro} kernel option, which requires this
@@ -6797,8 +6947,8 @@ options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
     When there are multiple distros and it is required to specify this option for specific distros only, use
     \texttt{autoopts:\{PARTUUID\}+=ro} to manually add the option where required, instead of using this flag.
 
-	  \item \texttt{0x00000800} (bit \texttt{11}) --- \texttt{LINUX\_BOOT\_ADD\_RW},
-	  Like \texttt{LINUX\_BOOT\_ADD\_RO}, this option applies to autodetected Linux only. It is not
+    \item \texttt{0x00000800} (bit \texttt{11}) --- \texttt{LINUX\_BOOT\_ADD\_RW},
+    Like \texttt{LINUX\_BOOT\_ADD\_RO}, this option applies to autodetected Linux only. It is not
     required for most distros (which usually require either \texttt{ro} or nothing to be added to
     detected boot options), but is required on some Arch-derived distros, e.g. EndeavourOS.
     When there are multiple distros and it is required to specify this option for specific distros only, use
@@ -6806,27 +6956,27 @@ options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
     If this option and \texttt{LINUX\_BOOT\_ADD\_RO} are both specified, only this option is applied
     and \texttt{LINUX\_BOOT\_ADD\_RO} is ignored.
 
-	  \item \texttt{0x00002000} (bit \texttt{13}) --- \texttt{LINUX\_BOOT\_ALLOW\_CONF\_AUTO\_ROOT},
-	  In some instances of \texttt{BootLoaderSpecByDefault} in combination with \texttt{ostree}, the
+    \item \texttt{0x00002000} (bit \texttt{13}) --- \texttt{LINUX\_BOOT\_ALLOW\_CONF\_AUTO\_ROOT},
+    In some instances of \texttt{BootLoaderSpecByDefault} in combination with \texttt{ostree}, the
     \texttt{/loader/entries/*.conf} files do not specify a required \texttt{root=...} kernel
     option -- it is added by GRUB. If this bit is set and this situation is detected, then
     automatically add this option. (Required for example by Endless OS.)
-	  \item \texttt{0x00004000} (bit \texttt{14}) --- \texttt{LINUX\_BOOT\_LOG\_VERBOSE},
-	  Add additional debug log info about files encountered and autodetect options added while scanning for
+    \item \texttt{0x00004000} (bit \texttt{14}) --- \texttt{LINUX\_BOOT\_LOG\_VERBOSE},
+    Add additional debug log info about files encountered and autodetect options added while scanning for
     Linux boot entries.
-	  \item \texttt{0x00008000} (bit \texttt{15}) --- \texttt{LINUX\_BOOT\_ADD\_DEBUG\_INFO},
-	  Adds a human readable file system type, followed by the first eight characters of the
-	  partition's unique partition uuid, to each generated entry name. Can help with debugging
-	  the origin of entries generated by the driver when there are multiple Linux installs on
-	  one system.
+    \item \texttt{0x00008000} (bit \texttt{15}) --- \texttt{LINUX\_BOOT\_ADD\_DEBUG\_INFO},
+    Adds a human readable file system type, followed by the first eight characters of the
+    partition's unique partition uuid, to each generated entry name. Can help with debugging
+    the origin of entries generated by the driver when there are multiple Linux installs on
+    one system.
   \end{itemize} \medskip
 
-	Flag values can be specified in hexadecimal beginning with \texttt{0x} or in decimal,
+  Flag values can be specified in hexadecimal beginning with \texttt{0x} or in decimal,
   e.g. \texttt{flags=0x80} or \texttt{flags=128}. It is also possible to specify flags to
   add or remove, using syntax such as \texttt{flags+=0xC000} to add all debugging
   options or \texttt{flags-=0x400} to remove the \texttt{LINUX\_BOOT\_ADD\_RO} option. \medskip
 
-	\item \texttt{autoopts:\{PARTUUID\}[+]="\{options\}"} - Default: not set. \medskip
+  \item \texttt{autoopts:\{PARTUUID\}[+]="\{options\}"} - Default: not set. \medskip
 
   Allows manually specifying kernel options to use in autodetect mode for a given partition only.
   Replace the text \texttt{\{PARTUUID\}} with the specific partition UUID on which the kernels are stored
@@ -6844,7 +6994,7 @@ options for the driver may be specified in \texttt{UEFI/Drivers/Arguments}:
   Linux \texttt{mount} command, and then find out the partuuid of relevant mounted partitions by examining the
   output of \texttt{ls -l /dev/disk/by-partuuid}. \medskip
 
-	\item \texttt{autoopts[+]="\{options\}"} - Default: None specified. \medskip
+  \item \texttt{autoopts[+]="\{options\}"} - Default: None specified. \medskip
 
   Allows manually specifying kernel options to use in autodetect mode. The alternative format \texttt{autoopts:\{PARTUUID\}}
   is more suitable where there are multiple distros, but \texttt{autoopts} with no PARTUUID required may be more
@@ -7000,6 +7150,11 @@ value, as it is very easy when using it to inadvertently break OS seal and preve
 will report that SIP has a non-standard value, however protection will be functionally the same.
 \end{itemize}
 
+\subsubsection{FirmwareSettings}\label{firmwaresettings}
+
+Adds a menu entry which will reboot into UEFI firmware settings, when supported.
+No menu entry added and logs a warning when not supported.
+
 \subsection{AudioDxe}\label{uefiaudio}
 
 High Definition Audio (HDA) support driver in UEFI firmware for most Intel and some other analog audio controllers.
@@ -7017,7 +7172,7 @@ the driver within the \texttt{UEFI/Drivers} section:
 
 \begin{itemize}
   \tightlist
-	\item \texttt{-{}-codec-setup-delay} - Integer value, default \texttt{0}. \medskip
+  \item \texttt{-{}-codec-setup-delay} - Integer value, default \texttt{0}. \medskip
 
   Amount of time in milliseconds to wait for all widgets to come fully on, applied per codec
   during driver connection phase. In most systems this should not be needed and a faster boot
@@ -7029,7 +7184,7 @@ the driver within the \texttt{UEFI/Drivers} section:
   Force use of an audio codec, this value should be equal to \texttt{Audio} section \texttt{AudioCodec}.
   Can result in faster boot especially when used in conjuction with \texttt{-{}-force-device}. \medskip
 
-	\item \texttt{-{}-force-device} - String value, no default. \medskip
+  \item \texttt{-{}-force-device} - String value, no default. \medskip
 
   When this option is present and has a value (e.g. \texttt{-{}-force-device=PciRoot(0x0)/Pci(0x1f,0x3)}), it
   forces AudioDxe to connect to the specified PCI device, even if the device does not report itself as
@@ -7048,7 +7203,7 @@ the driver within the \texttt{UEFI/Drivers} section:
   \item \texttt{-{}-gpio-setup} - Default value is \texttt{0} (GPIO setup disabled) if argument is not provided,
   or \texttt{7} (all GPIO setup stages stages enabled) if the argument is provided with no value. \medskip
 
-	Available values, which may be combined by adding, are: \medskip
+  Available values, which may be combined by adding, are: \medskip
 
   \begin{itemize}
   \tightlist
@@ -7072,9 +7227,9 @@ the driver within the \texttt{UEFI/Drivers} section:
   sound (previous sounds are not allowed to finish before new sounds start) on a small number
   of other systems, hence this option is not enabled by default. \medskip
 
-	\item \texttt{-{}-gpio-pins} - Default: \texttt{0}, auto-detect. \medskip
+  \item \texttt{-{}-gpio-pins} - Default: \texttt{0}, auto-detect. \medskip
 
-	Specifies which GPIO pins should be operated on by \texttt{-{}-gpio-setup}. This is a bit mask,
+  Specifies which GPIO pins should be operated on by \texttt{-{}-gpio-setup}. This is a bit mask,
   with possible values from \texttt{0x0} to \texttt{0xFF}. The usable maximum depends on
   the number if available pins on the audio out function group of the codec in use, e.g. it is
   \texttt{0x3} (lowest two bits) if two GPIO pins are present, \texttt{0x7} if three pins are present,
@@ -7091,7 +7246,7 @@ the driver within the \texttt{UEFI/Drivers} section:
   Values for driver parameters can be specified in hexadecimal beginning with \texttt{0x} or
   in decimal, e.g. \texttt{-{}-gpio-pins=0x12} or \texttt{-{}-gpio-pins=18}. \medskip
 
-	\item \texttt{-{}-restore-nosnoop} - Boolean flag, enabled if present. \medskip
+  \item \texttt{-{}-restore-nosnoop} - Boolean flag, enabled if present. \medskip
 
   AudioDxe clears the Intel HDA No Snoop Enable (NSNPEN) bit. On some systems, this change must
   be reversed on exit in order to avoid breaking sound in Windows or Linux. If so, this flag should
@@ -7099,12 +7254,12 @@ the driver within the \texttt{UEFI/Drivers} section:
   Not enabled by default, since restoring the flag can prevent sound from working in macOS on
   some other systems. \medskip
 
-	\item \texttt{-{}-use-conn-none} - Boolean flag, enabled if present. \medskip
+  \item \texttt{-{}-use-conn-none} - Boolean flag, enabled if present. \medskip
 
   On some sound cards enabling this option will enable additional usable audio channels (e.g.
   the bass or treble speaker of a pair, where only one is found without it).
   \medskip
-  
+
   \emph{Note}: Enabling this option may increase the available channels, in which case any
   custom setting of \texttt{AudioOutMask} may need to be changed to match the new channel list.
   \medskip
@@ -7238,10 +7393,22 @@ entry is no longer present, the entry for the new OS will still be automatically
 If not, it should be manually selected (at this point, \texttt{CTRL+Enter} is a good idea as any final remaining installion restarts
 will be to this entry).
 
-\emph{Note}: When using emulated NVRAM but not installing from within an existing installed macOS (i.e. when installing from
+\emph{Note 1}: When using emulated NVRAM but not installing from within an existing installed macOS (i.e. when installing from
 within macOS Recovery, or from an installation USB), please refer to this
 \href{https://applelife.ru/posts/916248}{forum post} (in Russian)
 for additional options.
+
+\emph{Note 2}: After upgrading from an ealier macOS version to macOS Sonoma, the \texttt{Launchd.command} script should be
+reinstalled, as a different strategy is required in order for NVRAM to be saved successfully.
+
+\emph{Note 3}: In macOS Sonoma the following additional constraints apply to the ESP paritition on which
+OpenCore is installed, in order for the \texttt{Launchd.command} script to work successfully:
+
+\begin{itemize}
+\tightlist
+ \item It must not be set to automount.
+ \item It must be unmounted again before shutdown or restart if it was manually mounted.
+\end{itemize}
 
 \subsection{Properties}\label{uefiprops}
 
@@ -8150,7 +8317,7 @@ for additional options.
   \texttt{Text} and \texttt{Graphics} specify the named mode. \texttt{Auto}
   uses the current mode of the system \texttt{ConsoleControl} protocol when
   one exists, defaulting to \texttt{Text} mode otherwise.
- 
+
   UEFI firmware typically supports \texttt{ConsoleControl} with two
   rendering modes: \texttt{Graphics} and \texttt{Text}. Some types of firmware
   do not provide a native \texttt{ConsoleControl} and rendering modes. OpenCore
@@ -8308,7 +8475,7 @@ for additional options.
 
   \emph{Note}: This option depends on the \href{https://github.com/acidanthera/OpenCorePkg/blob/master/Include/Acidanthera/Protocol/OcForceResolution.h}{\texttt{OC\_FORCE\_RESOLUTION\_PROTOCOL}}
   protocol being present. This protocol is currently only supported by \texttt{OpenDuetPkg}. The
-  \texttt{OpenDuetPkg} implementation currently only supports Intel iGPUs.
+  \texttt{OpenDuetPkg} implementation currently only supports Intel iGPUs and certain ATI GPUs.
 
 \item
   \texttt{ClearScreenOnModeSwitch}\\
@@ -8823,7 +8990,7 @@ for additional options.
   or corrupted in any way.
   \end{itemize}
 
-\item
+  \item
   \texttt{ResizeUsePciRbIo}\\
   \textbf{Type}: \texttt{plist\ boolean}\\
   \textbf{Failsafe}: \texttt{false}\\
@@ -8833,6 +9000,16 @@ for additional options.
   This is needed on systems with a buggy \texttt{PciIo} implementation where trying to configure
   Resizable BAR results in \texttt{Capability I/O Error}. Typically this is required on
   older systems which have been modified with \href{https://github.com/xCuri0/ReBarUEFI}{ReBarUEFI}.
+
+  \item
+  \texttt{ShimRetainProtocol}\\
+  \textbf{Type}: \texttt{plist\ boolean}\\
+  \textbf{Failsafe}: \texttt{false}\\
+  \textbf{Description}: Request Linux Shim to keep protocol installed for subsequent image loads.
+
+  This option is only required if chaining OpenCore from Shim. It must be set in order to allow
+  OpenCore to launch items which are verified by certificates present in Shim, but not in the
+  system Secure Boot database.
 
 \item
   \texttt{ResizeGpuBars}\\
@@ -9171,15 +9348,16 @@ requires several steps and careful configuration of certain settings as explaine
   the same private key.
 \item Sign all third-party operating system (not made by Microsoft or Apple)
   bootloaders if needed. For Linux there is an option to install
-  Microsoft-signed Shim bootloader as explained on e.g.
-  \href{https://wiki.debian.org/SecureBoot}{Debian Wiki}.
+  a user built, user signed Shim bootloader giving SBAT and MOK integration,
+  as explained in the \texttt{/Utilities/ShimUtils} directory of OpenCore
+  source or releases.
 \item Enable UEFI Secure Boot in firmware preferences and install the
   certificate with a private key. Details on how to generate a certificate
   can be found in various articles, such as \href{https://habr.com/en/post/273497}{this one},
   and are out of the scope of this document. If Windows is needed one
   will also need to add the
   \href{http://go.microsoft.com/fwlink/?LinkID=321192}{Microsoft Windows Production CA 2011}.
-  To launch option ROMs or to use signed Linux drivers,
+  To launch option ROMs or to use signed Linux drivers if not using a user build of Shim,
   \href{http://go.microsoft.com/fwlink/?LinkId=321194}{Microsoft UEFI Driver Signing CA} will also be needed.
 \item Password-protect changing firmware settings to ensure that UEFI Secure Boot
   cannot be disabled without the user's knowledge.
@@ -9195,7 +9373,8 @@ requires several steps and careful configuration of certain settings as explaine
   some extra precautions. Things to consider:
 
   \begin{itemize}
-  \item MBR (Master Boot Record) installations are legacy and will not be supported.
+  \item MBR (Master Boot Record) installations are legacy and are only supported
+  with the OpenLegacyBoot driver on legacy systems.
   \item All the modifications applied (to ACPI, NVRAM, SMBIOS, etc.) are supposed
   to be operating system agnostic, i.e. apply equally regardless of the OS booted.
   This enables Boot Camp software experience on Windows.

@@ -1,9 +1,72 @@
 OpenCore Changelog
 ==================
+#### v1.0.0
+- Updated builtin firmware versions for SMBIOS and the rest
+
+#### v0.9.9
+- Fixed incorrect warning in ocvalidate
+- Modified `Launchd.command` to recreate its log file if deleted
+- Updated `Launchd.command` to work with macOS Sonoma (re-run `./Launchd.command install` after upgrading to Sonoma)
+- Fixed an incorrectly labelled MacBookPro11,3 model code in `macserial`, thx @Macschrauber
+- Improved macrecovery download logic for slow connections to get chunklist first, thx @scriptod911
+
+#### v0.9.8
+- Updated OpenDuet to allow loading unsigned, unaligned legacy Apple images such as HfsPlusLegacy.efi
+- Fixed CPU frequency calculation on AMD 10h family
+- Swapped the position of Shutdown and Restart buttons to better match recent macOS
+- Added `OC_ATTR_USE_REVERSED_UI` to allow access to previous default Shutdown and Restart button arrangement
+- Fixed intro animation getting stuck in OpenCanopy if an entry which returns to menu is selected before animation ends
+- Modified OpenCanopy to require presence of label images only when used due to `OC_ATTR_USE_GENERIC_LABEL_IMAGE`
+- Provided `OC_ATTR_REDUCE_MOTION` to optionally disable non-required OpenCanopy menu animations
+- Modified NVRAM logout hook to handle XML entities in string vars
+- Fixed CPU frequency calculation on AMD 0Fh family
+- Added kext blocker `Exclude` strategy for mkext
+- Re-enabled AudioDxe failover to protocol GET mode for systems such as Acer E5 where it works when DisconnectHda doesn't
+- Added `FirmwareSettingsEntry.efi` driver which adds menu entry to reboot into UEFI firmware settings
+- Enabled use of picker shortcut keys which are read out in OpenCanopy when using `PickerAudioAssist`
+- Modified builtin picker so as not to respond to keys queued while audio assist menu is being read out
+- Fixed Linux EFI stub loading error when using OpenDuet since 0.8.8
+- Fixed APFS JumpStart with OpenDuet and `SecureBootModel` `Disabled`
+- Added TSC frequency calculation for xen hypervisor, thx @netanelc305
+- Supported additional early Nvidia UEFI VBIOS in `EnableGop` `vBiosInsert.sh`
+
+#### v0.9.7
+- Updated recovery_urls.txt
+- Changed OpenDuet to enforce `W^X` settings rather than fixing them in loaded images
+- Updated `FixupAppleEfiImages` quirk to fix `W^X` errors in all non-Secure Boot Apple signed binaries
+- Updated builtin firmware versions for SMBIOS and the rest
+- Updated `AppleEfiSignTool` to work with new PE COFF loader
+- Fixed recovery failing to boot on some systems
+- Updated `ProvideCurrentCpuInfo` quirk to support CPUID leaf 0x2 cache size reporting on Mac OS X 10.5 and 10.6
+- Updated `efidebug.tool` to support new standard image format
+
+#### v0.9.6
+- Updated builtin firmware versions for SMBIOS and the rest
+- Fixed hang while generating boot entries on some systems
+- Added `efidebug.tool` support for 32-bit on 32-bit using GDB or LLDB
+- Fixed potential incorrect values in kernel image capabilities calculation
+- Added `FixupAppleEfiImages` quirk to allow booting Mac OS X 10.4 and 10.5 boot.efi images on modern secure image loaders
+
+#### v0.9.5
+- Fixed GUID formatting for legacy NVRAM saving
+- Fixed inability to open files in root directory on an NTFS filesystem
+- Fixed hang while unloading NTFS driver
+- Added UEFI quirk `ShimRetainProtocol`, allowing OpenCore chained from shim to verify Linux using shim's certificates
+- Added `OpenLegacyBoot` driver for supporting legacy OS booting
+- Added `shim-make.tool` to download and build rhboot/shim, for Linux SBAT and MOK integration
+
 #### v0.9.4
 - Fixed kext blocker `Exclude` strategy for prelinked on 32-bit versions of macOS
 - Fixed `ForceAquantiaEthernet` quirk on macOS 14 beta 2, thx @Shikumo
-- Added `InstanceIdentifier` and option to target `.contentVisibility` to specific instances (thx @dakanji)
+- Added `InstanceIdentifier` to OpenCore and option to target `.contentVisibility` to specific instances (thx @dakanji)
+- Improved `LapicKernelPanic` quirk on legacy versions of macOS
+- Allowed `.contentVisibility` in same boot FS root locations as `.VolumeIcon.icns`, in order to survive macOS updates
+- Fixed incorrect core count on Silvermont Atom/Celeron processors
+- Fixed PM timer detection on Silvermont Atom/Celeron processors for TSC calculations
+- Fixed PM timer detection on non-Intel chipsets when booted through OpenDuet
+- Fixed `FadtEnableReset` on NVIDIA nForce chipset platforms
+- Added BlockIoDxe alternative OpenDuet variant
+- Added support for ATI cards when using `ForceResolution` option
 
 #### v0.9.3
 - Added `--force-codec` option to AudioDxe, thx @xCuri0

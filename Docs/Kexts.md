@@ -17,7 +17,7 @@ Kexts
 | Wi-Fi and bluetooth | MinKernel (Min macOS) | MaxKernel (Max macOS) | Note |
 |---------------------|-----------------------|-----------------------|------|
 | [AirPortAtheros40.kext](https://i.applelife.ru/2018/12/442854_AirPortAtheros40.kext.zip) | 18.0.0 (10.14) | — | From 10.13 |
-| [AirportBrcmFixup.kext](https://github.com/acidanthera/AirportBrcmFixup) | 12.0.0 (10.8) | 22.9.9 (13) | — |
+| [AirportBrcmFixup.kext](https://github.com/acidanthera/AirportBrcmFixup) | 12.0.0 (10.8) | 23.9.9 (14) | — |
 | [ATH9KFixup.kext](https://github.com/chunnann/ATH9KFixup) | — | — | — |
 | [BrcmPatchRAM](https://github.com/acidanthera/BrcmPatchRAM) | 14.0.0 (10.10) | 23.9.9 (14) | — |
 | [IntelBluetoothFirmware](https://github.com/zxystd/IntelBluetoothFirmware) | — | — | — |
@@ -77,7 +77,7 @@ Kexts
 | [IOElectrify.kext](https://github.com/the-darkvoid/macOS-IOElectrify) | — | — | — |
 | [Legacy_InternalHub-EHCx.kext](https://applelife.ru/posts/537459) | 15.0.0 (10.11) | — | — |
 | [Legacy_USB3.kext](https://applelife.ru/posts/537459) | 15.0.0 (10.11) | — | — |
-| [NVMeFix.kext](https://github.com/acidanthera/NVMeFix) | 18.0.0 (10.14) | 22.9.9 (13) | — |
+| [NVMeFix.kext](https://github.com/acidanthera/NVMeFix) | 18.0.0 (10.14) | 23.9.9 (14) | — |
 | [USBWakeFixup.kext](https://github.com/osy86/USBWakeFixup) | — | — | — |
 | [SASMegaRAID.kext](https://github.com/dukzcry/osx-goodies) | — | — | — |
 | [Sinetek-rtsx.kext](https://www.insanelymac.com/forum/topic/321080-sineteks-driver-for-realtek-rtsx-sdhc-card-readers/?do=findComment&comment=2376387) | — | — | — |

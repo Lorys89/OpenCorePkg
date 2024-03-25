@@ -10,6 +10,7 @@ buildutil() {
     "AppleEfiSignTool"
     "ACPIe"
     "EfiResTool"
+    "ext4read"
     "LogoutHook"
     "acdtinfo"
     "disklabel"
@@ -188,6 +189,7 @@ package() {
       "DnsDxe.efi"
       "DpcDxe.efi"
       "Ext4Dxe.efi"
+      "FirmwareSettingsEntry.efi"
       "HiiDatabase.efi"
       "HttpBootDxe.efi"
       "HttpDxe.efi"
@@ -197,6 +199,7 @@ package() {
       "NvmExpressDxe.efi"
       "OpenCanopy.efi"
       "OpenHfsPlus.efi"
+      "OpenLegacyBoot.efi"
       "OpenLinuxBoot.efi"
       "OpenNtfsDxe.efi"
       "OpenPartitionDxe.efi"
@@ -244,7 +247,7 @@ package() {
     "FindSerialPort"
     "macrecovery"
     "kpdescribe"
-    "ShimToCert"
+    "ShimUtils"
     )
   for utilScpt in "${utilScpts[@]}"; do
     cp -r "${selfdir}/Utilities/${utilScpt}" "${dstdir}/Utilities"/ || exit 1
@@ -268,14 +271,22 @@ package() {
   for arch in "${ARCHS[@]}"; do
     local tgt
     local booter
+    local booter_blockio
     tgt="$(basename "$(pwd)")"
     booter="$(pwd)/../../OpenDuetPkg/${tgt}/${arch}/boot"
+    booter_blockio="$(pwd)/../../OpenDuetPkg/${tgt}/${arch}/boot-blockio"
 
     if [ -f "${booter}" ]; then
       echo "Copying OpenDuetPkg boot file from ${booter}..."
       cp "${booter}" "${dstdir}/Utilities/LegacyBoot/boot${arch}" || exit 1
     else
       echo "Failed to find OpenDuetPkg at ${booter}!"
+    fi
+    if [ -f "${booter_blockio}" ]; then
+      echo "Copying OpenDuetPkg BlockIO boot file from ${booter_blockio}..."
+      cp "${booter_blockio}" "${dstdir}/Utilities/LegacyBoot/boot${arch}-blockio" || exit 1
+    else
+      echo "Failed to find OpenDuetPkg BlockIO at ${booter_blockio}!"
     fi
   done
 
@@ -367,13 +378,13 @@ if [ "$ARCHS" = "" ]; then
 fi
 SELFPKG=OpenCorePkg
 NO_ARCHIVES=0
-DISCARD_PACKAGES=OpenCorePkg
+DISCARD_SUBMODULES=OpenCorePkg
 
 export SELFPKG
 export NO_ARCHIVES
-export DISCARD_PACKAGES
+export DISCARD_SUBMODULES
 
-src=$(curl -Lfs https://raw.githubusercontent.com/acidanthera/ocbuild/master/efibuild.sh) && eval "$src" || exit 1
+src=$(curl -LfsS https://raw.githubusercontent.com/acidanthera/ocbuild/master/efibuild.sh) && eval "$src" || exit 1
 
 cd Utilities/ocvalidate || exit 1
 ocv_tool=""

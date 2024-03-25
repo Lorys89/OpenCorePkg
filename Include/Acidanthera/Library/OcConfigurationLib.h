@@ -142,6 +142,7 @@ OC_DECLARE (OC_BOOTER_PATCH_ARRAY)
   _(BOOLEAN                     , DiscardHibernateMap       ,     , FALSE  , ()) \
   _(BOOLEAN                     , EnableSafeModeSlide       ,     , FALSE  , ()) \
   _(BOOLEAN                     , EnableWriteUnprotector    ,     , FALSE  , ()) \
+  _(BOOLEAN                     , FixupAppleEfiImages       ,     , FALSE  , ()) \
   _(BOOLEAN                     , ForceBooterSignature      ,     , FALSE  , ()) \
   _(BOOLEAN                     , ForceExitBootServices     ,     , FALSE  , ()) \
   _(BOOLEAN                     , ProtectMemoryRegions      ,     , FALSE  , ()) \
@@ -748,6 +749,7 @@ OC_DECLARE (OC_UEFI_PROTOCOL_OVERRIDES)
   _(BOOLEAN                     , ReleaseUsbOwnership         ,     , FALSE  , ()) \
   _(BOOLEAN                     , ReloadOptionRoms            ,     , FALSE  , ()) \
   _(BOOLEAN                     , RequestBootVarRouting       ,     , FALSE  , ()) \
+  _(BOOLEAN                     , ShimRetainProtocol          ,     , FALSE  , ()) \
   _(BOOLEAN                     , UnblockFsConnect            ,     , FALSE  , ()) \
   _(BOOLEAN                     , ForceOcWriteFlash           ,     , FALSE  , ())
 OC_DECLARE (OC_UEFI_QUIRKS)

@@ -77,6 +77,7 @@ typedef struct OC_HOTKEY_CONTEXT_ OC_HOTKEY_CONTEXT;
 #define OC_FLAVOUR_TOGGLE_SIP           "ToggleSIP:NVRAMTool"
 #define OC_FLAVOUR_TOGGLE_SIP_ENABLED   "ToggleSIP_Enabled:ToggleSIP:NVRAMTool"
 #define OC_FLAVOUR_TOGGLE_SIP_DISABLED  "ToggleSIP_Disabled:ToggleSIP:NVRAMTool"
+#define OC_FLAVOUR_FIRMWARE_SETTINGS    "FirmwareSettings"
 #define OC_FLAVOUR_APPLE_OS             "Apple"
 #define OC_FLAVOUR_APPLE_RECOVERY       "AppleRecv:Apple"
 #define OC_FLAVOUR_APPLE_FW             "AppleRecv:Apple"
@@ -90,6 +91,7 @@ typedef struct OC_HOTKEY_CONTEXT_ OC_HOTKEY_CONTEXT;
 #define OC_FLAVOUR_ID_UEFI_SHELL           "UEFIShell"
 #define OC_FLAVOUR_ID_TOGGLE_SIP_ENABLED   "ToggleSIP_Enabled"
 #define OC_FLAVOUR_ID_TOGGLE_SIP_DISABLED  "ToggleSIP_Disabled"
+#define OC_FLAVOUR_ID_FIRMWARE_SETTINGS    "FirmwareSettings"
 
 /**
   Paths allowed to be accessible by the interfaces.
@@ -110,11 +112,14 @@ typedef struct OC_HOTKEY_CONTEXT_ OC_HOTKEY_CONTEXT;
 #define OC_ATTR_SHOW_DEBUG_DISPLAY       BIT5
 #define OC_ATTR_USE_MINIMAL_UI           BIT6
 #define OC_ATTR_USE_FLAVOUR_ICON         BIT7
+#define OC_ATTR_USE_REVERSED_UI          BIT8
+#define OC_ATTR_REDUCE_MOTION            BIT9
 #define OC_ATTR_ALL_BITS                 (\
   OC_ATTR_USE_VOLUME_ICON         | OC_ATTR_USE_DISK_LABEL_FILE | \
   OC_ATTR_USE_GENERIC_LABEL_IMAGE | OC_ATTR_HIDE_THEMED_ICONS   | \
   OC_ATTR_USE_POINTER_CONTROL     | OC_ATTR_SHOW_DEBUG_DISPLAY  | \
-  OC_ATTR_USE_MINIMAL_UI          | OC_ATTR_USE_FLAVOUR_ICON )
+  OC_ATTR_USE_MINIMAL_UI          | OC_ATTR_USE_FLAVOUR_ICON    | \
+  OC_ATTR_USE_REVERSED_UI         | OC_ATTR_REDUCE_MOTION )
 
 /**
   Default timeout for IDLE timeout during menu picker navigation
@@ -152,6 +157,7 @@ typedef UINT32 OC_BOOT_ENTRY_TYPE;
 #define OC_BOOT_EXTERNAL_OS         BIT6
 #define OC_BOOT_EXTERNAL_TOOL       BIT7
 #define OC_BOOT_SYSTEM              BIT8
+#define OC_BOOT_EXTERNAL_SYSTEM     BIT9
 
 /**
   Picker mode.
@@ -194,6 +200,26 @@ EFI_STATUS
   );
 
 /**
+  Action to perform as part of executing an external boot system boot entry.
+**/
+typedef
+EFI_STATUS
+(*OC_BOOT_EXTERNAL_SYSTEM_ACTION) (
+  IN OUT  OC_PICKER_CONTEXT         *PickerContext,
+  IN      EFI_DEVICE_PATH_PROTOCOL  *DevicePath
+  );
+
+/**
+  Gets Device Path for external boot system boot entry.
+**/
+typedef
+EFI_STATUS
+(*OC_BOOT_EXTERNAL_SYSTEM_GET_DP) (
+  IN OUT  OC_PICKER_CONTEXT         *PickerContext,
+  IN OUT  EFI_DEVICE_PATH_PROTOCOL  **DevicePath
+  );
+
+/**
   Discovered boot entry.
   Note, inner resources must be freed with FreeBootEntry.
 **/
@@ -201,103 +227,111 @@ typedef struct OC_BOOT_ENTRY_ {
   //
   // Link in entry list in OC_BOOT_FILESYSTEM.
   //
-  LIST_ENTRY                  Link;
+  LIST_ENTRY                        Link;
   //
   // Device path to booter or its directory.
   // Can be NULL, for example, for custom or system entries.
   //
-  EFI_DEVICE_PATH_PROTOCOL    *DevicePath;
+  EFI_DEVICE_PATH_PROTOCOL          *DevicePath;
   //
   // Action to perform on execution. Only valid for system entries.
   //
-  OC_BOOT_SYSTEM_ACTION       SystemAction;
+  OC_BOOT_SYSTEM_ACTION             SystemAction;
+  //
+  // Action to perform on execution. Only valid for external boot system entries.
+  //
+  OC_BOOT_EXTERNAL_SYSTEM_ACTION    ExternalSystemAction;
+  //
+  // Gets Device Path for external boot system boot entry. Only valid for external boot system entries.
+  //
+  OC_BOOT_EXTERNAL_SYSTEM_GET_DP    ExternalSystemGetDevicePath;
   //
   // Id under which to save entry as default.
   //
-  CHAR16                      *Id;
+  CHAR16                            *Id;
   //
   // Obtained human visible name.
   //
-  CHAR16                      *Name;
+  CHAR16                            *Name;
   //
   // Obtained boot path directory.
   // For custom entries this contains tool path.
   //
-  CHAR16                      *PathName;
+  CHAR16                            *PathName;
   //
   // Content flavour.
   //
-  CHAR8                       *Flavour;
+  CHAR8                             *Flavour;
   //
   // Heuristical value signaling inferred type of booted os.
   // WARNING: Non-definitive, do not rely on for any security purposes.
   //
-  OC_BOOT_ENTRY_TYPE          Type;
+  OC_BOOT_ENTRY_TYPE                Type;
   //
   // Entry index number, assigned by picker.
   //
-  UINT32                      EntryIndex;
+  UINT32                            EntryIndex;
   //
   // Set when this entry is an externally available entry (e.g. USB).
   //
-  BOOLEAN                     IsExternal;
+  BOOLEAN                           IsExternal;
   //
   // Should try booting from first dmg found in DevicePath.
   //
-  BOOLEAN                     IsFolder;
+  BOOLEAN                           IsFolder;
   //
   // Set when this entry refers to a generic booter (e.g. BOOTx64.EFI).
   //
-  BOOLEAN                     IsGeneric;
+  BOOLEAN                           IsGeneric;
   //
   // Set when this entry refers to a custom boot entry.
   //
-  BOOLEAN                     IsCustom;
+  BOOLEAN                           IsCustom;
   //
   // Set when entry was created by OC_BOOT_ENTRY_PROTOCOL.
   //
-  BOOLEAN                     IsBootEntryProtocol;
+  BOOLEAN                           IsBootEntryProtocol;
   //
   // Set when entry is identified as macOS installer.
   //
-  BOOLEAN                     IsAppleInstaller;
+  BOOLEAN                           IsAppleInstaller;
   //
   // Should make this option default boot option.
   //
-  BOOLEAN                     SetDefault;
+  BOOLEAN                           SetDefault;
   //
   // Should launch this entry in text mode.
   //
-  BOOLEAN                     LaunchInText;
+  BOOLEAN                           LaunchInText;
   //
   // Should expose real device path when dealing with custom entries.
   //
-  BOOLEAN                     ExposeDevicePath;
+  BOOLEAN                           ExposeDevicePath;
   //
   // Should disable OpenRuntime NVRAM protection around invocation of tool.
   //
-  BOOLEAN                     FullNvramAccess;
+  BOOLEAN                           FullNvramAccess;
   //
   // Partition UUID of entry device.
   // Set for non-system action boot entry protocol boot entries only.
   //
-  EFI_GUID                    UniquePartitionGUID;
+  EFI_GUID                          UniquePartitionGUID;
   //
   // Load option data (usually "boot args") size.
   //
-  UINT32                      LoadOptionsSize;
+  UINT32                            LoadOptionsSize;
   //
   // Load option data (usually "boot args").
   //
-  VOID                        *LoadOptions;
+  VOID                              *LoadOptions;
   //
   // Audio base path for system action. Boot Entry Protocol only.
   //
-  CHAR8                       *AudioBasePath;
+  CHAR8                             *AudioBasePath;
   //
   // Audio base type for system action. Boot Entry Protocol only.
   //
-  CHAR8                       *AudioBaseType;
+  CHAR8                             *AudioBaseType;
 } OC_BOOT_ENTRY;
 
 /**
@@ -557,56 +591,72 @@ typedef struct {
   // Multiple entries may share an id - allows e.g. newest version
   // of Linux install to automatically become selected default.
   //
-  CONST CHAR8              *Id;
+  CONST CHAR8                       *Id;
   //
   // Entry name.
   //
-  CONST CHAR8              *Name;
+  CONST CHAR8                       *Name;
   //
   // Absolute device path to file for user custom entries,
   // file path relative to device root for boot entry protocol.
   //
-  CONST CHAR8              *Path;
+  CONST CHAR8                       *Path;
   //
   // Entry boot arguments.
   //
-  CONST CHAR8              *Arguments;
+  CONST CHAR8                       *Arguments;
   //
   // Content flavour.
   //
-  CONST CHAR8              *Flavour;
+  CONST CHAR8                       *Flavour;
   //
   // Whether this entry is auxiliary.
   //
-  BOOLEAN                  Auxiliary;
+  BOOLEAN                           Auxiliary;
   //
   // Whether this entry is a tool.
   //
-  BOOLEAN                  Tool;
+  BOOLEAN                           Tool;
   //
   // Whether it should be started in text mode.
   //
-  BOOLEAN                  TextMode;
+  BOOLEAN                           TextMode;
   //
   // Whether we should pass the actual device path (if possible).
   //
-  BOOLEAN                  RealPath;
+  BOOLEAN                           RealPath;
   //
   // Should disable OpenRuntime NVRAM protection around invocation of tool.
   //
-  BOOLEAN                  FullNvramAccess;
+  BOOLEAN                           FullNvramAccess;
   //
   // System action. Boot Entry Protocol only. Optional.
   //
-  OC_BOOT_SYSTEM_ACTION    SystemAction;
+  OC_BOOT_SYSTEM_ACTION             SystemAction;
   //
   // Audio base path for system action. Boot Entry Protocol only. Optional.
   //
-  CHAR8                    *AudioBasePath;
+  CHAR8                             *AudioBasePath;
   //
   // Audio base type for system action. Boot Entry Protocol only. Optional.
   //
-  CHAR8                    *AudioBaseType;
+  CHAR8                             *AudioBaseType;
+  //
+  // External boot system action. Boot Entry Protocol only. Optional.
+  //
+  OC_BOOT_EXTERNAL_SYSTEM_ACTION    ExternalSystemAction;
+  //
+  // Gets Device Path for external boot system boot entry. Boot Entry Protocol only. Optional.
+  //
+  OC_BOOT_EXTERNAL_SYSTEM_GET_DP    ExternalSystemGetDevicePath;
+  //
+  // External boot system Device Path. Boot Entry Protocol only. Optional.
+  //
+  EFI_DEVICE_PATH_PROTOCOL          *ExternalSystemDevicePath;
+  //
+  // Whether this entry should be labeled as external to the system. Boot Entry Protocol only. Optional.
+  //
+  BOOLEAN                           External;
 } OC_PICKER_ENTRY;
 
 /**
@@ -1769,7 +1819,8 @@ OcRegisterBootstrapBootOption (
 **/
 VOID
 OcImageLoaderInit (
-  IN     CONST BOOLEAN  ProtectUefiServices
+  IN     CONST BOOLEAN  ProtectUefiServices,
+  IN     CONST BOOLEAN  FixupAppleEfiImages
   );
 
 /**
@@ -2112,6 +2163,101 @@ OcUnlockAppleFirmwareUI (
 EFI_STATUS
 OcLaunchAppleBootPicker (
   VOID
+  );
+
+/**
+  Read boot entry meta-data file from boot entry device path.
+  May be used before before OC_BOOT_ENTRY struct is created.
+
+  @param[in]  DevicePath          Boot entry device path.
+  @param[in]  FileName            File name to search for.
+  @param[in]  DebugFileType       Brief description of file for use in debug messages.
+  @param[in]  MaxFileSize         Maximum allowed file size (inclusive).
+  @param[in]  MinFileSize         Minimum allowed file size (inclusive).
+  @param[out] FileData            Returned file data.
+  @param[out] DataLength          Returned data length.
+  @param[in]  SearchAtLeaf        Search next to boot file (or in boot folder) first.
+  @param[in]  SearchAtRoot        After SearchAtLeaf (if specified), search at OC-specific
+                                  GUID sub-folder location (if present), then at FS root.
+
+  @retval EFI_SUCCESS   File was located, validated against allowed length, and returned.
+  @retval other         File could not be located, or had invalid length.
+**/
+EFI_STATUS
+EFIAPI
+OcGetBootEntryFileFromDevicePath (
+  IN  EFI_DEVICE_PATH_PROTOCOL  *DevicePath,
+  IN  CONST CHAR16              *FileName,
+  IN  CONST CHAR8               *DebugFileType,
+  IN  UINT32                    MaxFileSize,
+  IN  UINT32                    MinFileSize,
+  OUT VOID                      **FileData,
+  OUT UINT32                    *DataLength OPTIONAL,
+  IN  BOOLEAN                   SearchAtLeaf,
+  IN  BOOLEAN                   SearchAtRoot
+  );
+
+/**
+  Read boot entry meta-data file.
+  Validates that boot entry is external tool or OS type.
+
+  @param[in]  BootEntry           Boot entry.
+  @param[in]  FileName            File name to search for.
+  @param[in]  DebugFileType       Brief description of file for use in debug messages.
+  @param[in]  MaxFileSize         Maximum allowed file size (inclusive).
+  @param[in]  MinFileSize         Minimum allowed file size (inclusive).
+  @param[out] FileData            Returned file data.
+  @param[out] DataLength          Returned data length.
+  @param[in]  SearchAtLeaf        Search next to boot file (or in boot folder) first.
+  @param[in]  SearchAtRoot        After SearchAtLeaf (if specified), search at OC-specific
+                                  GUID sub-folder location (if present), then at FS root.
+
+  @retval EFI_SUCCESS   Boot entry was correct type, file was located, validated against allowed length, and returned.
+  @retval other         Boot entry was incorrect type, or file could not be located, or had invalid length.
+**/
+EFI_STATUS
+EFIAPI
+OcGetBootEntryFile (
+  IN  OC_BOOT_ENTRY  *BootEntry,
+  IN  CONST CHAR16   *FileName,
+  IN  CONST CHAR8    *DebugFileType,
+  IN  UINT32         MaxFileSize,
+  IN  UINT32         MinFileSize,
+  OUT VOID           **FileData,
+  OUT UINT32         *DataLength OPTIONAL,
+  IN  BOOLEAN        SearchAtLeaf,
+  IN  BOOLEAN        SearchAtRoot
+  );
+
+/**
+  Tests whether reset to firmware settings is supported.
+
+  @retval EFI_SUCCESS   Reset to firmware settings is supported.
+  @retval other         Reset to firmware settings is not supported.
+**/
+EFI_STATUS
+EFIAPI
+OcResetToFirmwareSettingsSupported (
+  VOID
+  );
+
+/**
+  Reset the system. Fails to reset if firmware mode is requested but not supported.
+  Defaults to cold reset when other reset fails, or unknown reset mode is requested.
+
+  @param[in]  Mode      Reset mode. Supported modes are:
+                         - "firmware"  - reboot to UEFI firmware settings, if supported
+                         - "warmreset" - warm reset
+                         - "coldreset" - cold reset
+                         - "shutdown"  - shut down
+
+  @retval EFI_SUCCESS   System was reset.
+  @retval other         System could not be reset.
+**/
+EFI_STATUS
+EFIAPI
+OcResetSystem (
+  IN CHAR16  *Mode
   );
 
 #endif // OC_BOOT_MANAGEMENT_LIB_H
