@@ -14,1317 +14,1107 @@
  */
 DefinitionBlock ("", "SSDT", 2, "ACDT", "CpuPlugA", 0x00003000)
 {
-    External (_SB_.PR00, DeviceObj)
-    External (_SB_.PR01, DeviceObj)
-    External (_SB_.PR02, DeviceObj)
-    External (_SB_.PR03, DeviceObj)
-    External (_SB_.PR04, DeviceObj)
-    External (_SB_.PR05, DeviceObj)
-    External (_SB_.PR06, DeviceObj)
-    External (_SB_.PR07, DeviceObj)
-    External (_SB_.PR08, DeviceObj)
-    External (_SB_.PR09, DeviceObj)
-    External (_SB_.PR10, DeviceObj)
-    External (_SB_.PR11, DeviceObj)
-    External (_SB_.PR12, DeviceObj)
-    External (_SB_.PR13, DeviceObj)
-    External (_SB_.PR14, DeviceObj)
-    External (_SB_.PR15, DeviceObj)
-    External (_SB_.PR16, DeviceObj)
-    External (_SB_.PR17, DeviceObj)
-    External (_SB_.PR18, DeviceObj)
-    External (_SB_.PR19, DeviceObj)
-    External (_SB_.PR20, DeviceObj)
-    External (_SB_.PR21, DeviceObj)
-    External (_SB_.PR22, DeviceObj)
-    External (_SB_.PR23, DeviceObj)
-    External (_SB_.PR24, DeviceObj)
-    External (_SB_.PR25, DeviceObj)
-    External (_SB_.PR26, DeviceObj)
-    External (_SB_.PR27, DeviceObj)
-    External (_SB_.PR28, DeviceObj)
-    External (_SB_.PR29, DeviceObj)
-    External (_SB_.PR30, DeviceObj)
-    External (_SB_.PR31, DeviceObj)
-    External (_SB_.PR32, DeviceObj)
-    External (_SB_.PR33, DeviceObj)
-    External (_SB_.PR34, DeviceObj)
-    External (_SB_.PR35, DeviceObj)
-    External (_SB_.PR36, DeviceObj)
-    External (_SB_.PR37, DeviceObj)
-    External (_SB_.PR38, DeviceObj)
-    External (_SB_.PR39, DeviceObj)
-    External (_SB_.PR40, DeviceObj)
-    External (_SB_.PR41, DeviceObj)
-    External (_SB_.PR42, DeviceObj)
-    External (_SB_.PR43, DeviceObj)
-    External (_SB_.PR44, DeviceObj)
-    External (_SB_.PR45, DeviceObj)
-    External (_SB_.PR46, DeviceObj)
-    External (_SB_.PR47, DeviceObj)
-    External (_SB_.PR48, DeviceObj)
-    External (_SB_.PR49, DeviceObj)
-    External (_SB_.PR50, DeviceObj)
-    External (_SB_.PR51, DeviceObj)
-    External (_SB_.PR52, DeviceObj)
-    External (_SB_.PR53, DeviceObj)
-    External (_SB_.PR54, DeviceObj)
-    External (_SB_.PR55, DeviceObj)
-    External (_SB_.PR56, DeviceObj)
-    External (_SB_.PR57, DeviceObj)
-    External (_SB_.PR58, DeviceObj)
-    External (_SB_.PR59, DeviceObj)
-    External (_SB_.PR60, DeviceObj)
-    External (_SB_.PR61, DeviceObj)
-    External (_SB_.PR62, DeviceObj)
-    External (_SB_.PR63, DeviceObj)
-    External (_SB_.SCK0.C000, DeviceObj)
-    External (_SB_.SCK0.C001, DeviceObj)
-    External (_SB_.SCK0.C002, DeviceObj)
-    External (_SB_.SCK0.C003, DeviceObj)
-    External (_SB_.SCK0.C004, DeviceObj)
-    External (_SB_.SCK0.C005, DeviceObj)
-    External (_SB_.SCK0.C006, DeviceObj)
-    External (_SB_.SCK0.C007, DeviceObj)
-    External (_SB_.SCK0.C008, DeviceObj)
-    External (_SB_.SCK0.C009, DeviceObj)
-    External (_SB_.SCK0.C00A, DeviceObj)
-    External (_SB_.SCK0.C00B, DeviceObj)
-    External (_SB_.SCK0.C00C, DeviceObj)
-    External (_SB_.SCK0.C00D, DeviceObj)
-    External (_SB_.SCK0.C00E, DeviceObj)
-    External (_SB_.SCK0.C00F, DeviceObj)
-    External (_SB_.SCK0.C010, DeviceObj)
-    External (_SB_.SCK0.C011, DeviceObj)
-    External (_SB_.SCK0.C012, DeviceObj)
-    External (_SB_.SCK0.C013, DeviceObj)
-    External (_SB_.SCK0.C014, DeviceObj)
-    External (_SB_.SCK0.C015, DeviceObj)
-    External (_SB_.SCK0.C016, DeviceObj)
-    External (_SB_.SCK0.C017, DeviceObj)
-    External (_SB_.SCK0.C018, DeviceObj)
-    External (_SB_.SCK0.C019, DeviceObj)
-    External (_SB_.SCK0.C01A, DeviceObj)
-    External (_SB_.SCK0.C01B, DeviceObj)
-    External (_SB_.SCK0.C01C, DeviceObj)
-    External (_SB_.SCK0.C01D, DeviceObj)
-    External (_SB_.SCK0.C01E, DeviceObj)
-    External (_SB_.SCK0.C01F, DeviceObj)
-    External (_SB_.SCK0.C020, DeviceObj)
-    External (_SB_.SCK0.C021, DeviceObj)
-    External (_SB_.SCK0.C022, DeviceObj)
-    External (_SB_.SCK0.C023, DeviceObj)
-    External (_SB_.SCK0.C024, DeviceObj)
-    External (_SB_.SCK0.C025, DeviceObj)
-    External (_SB_.SCK0.C026, DeviceObj)
-    External (_SB_.SCK0.C027, DeviceObj)
-    External (_SB_.SCK0.C028, DeviceObj)
-    External (_SB_.SCK0.C029, DeviceObj)
-    External (_SB_.SCK0.C02A, DeviceObj)
-    External (_SB_.SCK0.C02B, DeviceObj)
-    External (_SB_.SCK0.C02C, DeviceObj)
-    External (_SB_.SCK0.C02D, DeviceObj)
-    External (_SB_.SCK0.C02E, DeviceObj)
-    External (_SB_.SCK0.C02F, DeviceObj)
-    External (_SB_.SCK0.C030, DeviceObj)
-    External (_SB_.SCK0.C031, DeviceObj)
-    External (_SB_.SCK0.C032, DeviceObj)
-    External (_SB_.SCK0.C033, DeviceObj)
-    External (_SB_.SCK0.C034, DeviceObj)
-    External (_SB_.SCK0.C035, DeviceObj)
-    External (_SB_.SCK0.C036, DeviceObj)
-    External (_SB_.SCK0.C037, DeviceObj)
-    External (_SB_.SCK0.C038, DeviceObj)
-    External (_SB_.SCK0.C039, DeviceObj)
-    External (_SB_.SCK0.C03A, DeviceObj)
-    External (_SB_.SCK0.C03B, DeviceObj)
-    External (_SB_.SCK0.C03C, DeviceObj)
-    External (_SB_.SCK0.C03D, DeviceObj)
-    External (_SB_.SCK0.C03E, DeviceObj)
-    External (_SB_.SCK0.C03F, DeviceObj)
+    External (_SB_, DeviceObj)
 
-    Scope (\)
+    Scope (\_SB)
     {
-        Method (MO86, 0, NotSerialized)
+        Processor (CP00, 0x00, 0x00000510, 0x06)
         {
-            If (_OSI ("Darwin"))
+            Name (_HID, "ACPI0007" /* Processor Device */)  // _HID: Hardware ID
+            Name (_UID, Zero)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                Return (0x0F)
+                If (_OSI ("Darwin"))
+                {
+                    Return (0x0F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
             }
-            Else
+
+            Method (_DSM, 4, NotSerialized)
             {
-                Return (Zero)
+                If (LEqual (Arg2, Zero)) {
+                    Return (Buffer (One) { 0x03 })
+                }
+
+                Return (Package (0x02)
+                {
+                    "plugin-type",
+                    One
+                })
             }
         }
 
-        Scope (_SB)
+        Processor (CP01, 0x01, 0x00000510, 0x06)
         {
-            Processor (CP00, 0x00, 0x00000510, 0x06)
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 1)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR00))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR00) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C000))
+                Else
                 {
-                    Return (\_SB.SCK0.C000) /* External reference */
-                }
-
-                Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
-                {
-                    If ((Arg2 == Zero))
-                    {
-                        Return (Buffer (One)
-                        {
-                             0x03                                             // .
-                        })
-                    }
-
-                    Return (Package (0x02)
-                    {
-                        "plugin-type", 
-                        One
-                    })
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP01, 0x01, 0x00000510, 0x06)
+        Processor (CP02, 0x02, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 2)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR01))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR01) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C001))
+                Else
                 {
-                    Return (\_SB.SCK0.C001) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP02, 0x02, 0x00000510, 0x06)
+        Processor (CP03, 0x03, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 3)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR02))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR02) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C002))
+                Else
                 {
-                    Return (\_SB.SCK0.C002) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP03, 0x03, 0x00000510, 0x06)
+        Processor (CP04, 0x04, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 4)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR03))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR03) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C003))
+                Else
                 {
-                    Return (\_SB.SCK0.C003) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP04, 0x04, 0x00000510, 0x06)
+        Processor (CP05, 0x05, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 5)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR04))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR04) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C004))
+                Else
                 {
-                    Return (\_SB.SCK0.C004) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP05, 0x05, 0x00000510, 0x06)
+        Processor (CP06, 0x06, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 6)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR05))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR05) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C005))
+                Else
                 {
-                    Return (\_SB.SCK0.C005) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP06, 0x06, 0x00000510, 0x06)
+        Processor (CP07, 0x07, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 7)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR06))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR06) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C006))
+                Else
                 {
-                    Return (\_SB.SCK0.C006) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP07, 0x07, 0x00000510, 0x06)
+        Processor (CP08, 0x08, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 8)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR07))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR07) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C007))
+                Else
                 {
-                    Return (\_SB.SCK0.C007) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP08, 0x08, 0x00000510, 0x06)
+        Processor (CP09, 0x09, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 9)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR08))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR08) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C008))
+                Else
                 {
-                    Return (\_SB.SCK0.C008) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP09, 0x09, 0x00000510, 0x06)
+        Processor (CP10, 0x0A, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 10)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR09))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR09) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C009))
+                Else
                 {
-                    Return (\_SB.SCK0.C009) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP10, 0x0A, 0x00000510, 0x06)
+        Processor (CP11, 0x0B, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 11)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR10))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR10) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C00A))
+                Else
                 {
-                    Return (\_SB.SCK0.C00A) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP11, 0x0B, 0x00000510, 0x06)
+        Processor (CP12, 0x0C, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 12)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR11))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR11) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C00B))
+                Else
                 {
-                    Return (\_SB.SCK0.C00B) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP12, 0x0C, 0x00000510, 0x06)
+        Processor (CP13, 0x0D, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 13)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR12))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR12) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C00C))
+                Else
                 {
-                    Return (\_SB.SCK0.C00C) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP13, 0x0D, 0x00000510, 0x06)
+        Processor (CP14, 0x0E, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 14)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR13))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR13) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C00D))
+                Else
                 {
-                    Return (\_SB.SCK0.C00D) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP14, 0x0E, 0x00000510, 0x06)
+        Processor (CP15, 0x0F, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 15)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR14))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR14) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C00E))
+                Else
                 {
-                    Return (\_SB.SCK0.C00E) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP15, 0x0F, 0x00000510, 0x06)
+        Processor (CP16, 0x10, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 16)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR15))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR15) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C00F))
+                Else
                 {
-                    Return (\_SB.SCK0.C00F) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP16, 0x10, 0x00000510, 0x06)
+        Processor (CP17, 0x11, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 17)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR16))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR16) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C010))
+                Else
                 {
-                    Return (\_SB.SCK0.C010) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP17, 0x11, 0x00000510, 0x06)
+        Processor (CP18, 0x12, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 18)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR17))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR17) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C011))
+                Else
                 {
-                    Return (\_SB.SCK0.C011) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP18, 0x12, 0x00000510, 0x06)
+        Processor (CP19, 0x13, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 19)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR18))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR18) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C012))
+                Else
                 {
-                    Return (\_SB.SCK0.C012) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP19, 0x13, 0x00000510, 0x06)
+        Processor (CP20, 0x14, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 20)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR19))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR19) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C013))
+                Else
                 {
-                    Return (\_SB.SCK0.C013) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP20, 0x14, 0x00000510, 0x06)
+        Processor (CP21, 0x15, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 21)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR20))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR20) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C014))
+                Else
                 {
-                    Return (\_SB.SCK0.C014) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP21, 0x15, 0x00000510, 0x06)
+        Processor (CP22, 0x16, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 22)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR21))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR21) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C015))
+                Else
                 {
-                    Return (\_SB.SCK0.C015) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP22, 0x16, 0x00000510, 0x06)
+        Processor (CP23, 0x17, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 23)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR22))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR22) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C016))
+                Else
                 {
-                    Return (\_SB.SCK0.C016) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP23, 0x17, 0x00000510, 0x06)
+        Processor (CP24, 0x18, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 24)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR23))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR23) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C017))
+                Else
                 {
-                    Return (\_SB.SCK0.C017) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP24, 0x18, 0x00000510, 0x06)
+        Processor (CP25, 0x19, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 25)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR24))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR24) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C018))
+                Else
                 {
-                    Return (\_SB.SCK0.C018) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP25, 0x19, 0x00000510, 0x06)
+        Processor (CP26, 0x1A, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 26)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR25))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR25) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C019))
+                Else
                 {
-                    Return (\_SB.SCK0.C019) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP26, 0x1A, 0x00000510, 0x06)
+        Processor (CP27, 0x1B, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 27)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR26))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR26) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C01A))
+                Else
                 {
-                    Return (\_SB.SCK0.C01A) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP27, 0x1B, 0x00000510, 0x06)
+        Processor (CP28, 0x1C, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 28)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR27))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR27) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C01B))
+                Else
                 {
-                    Return (\_SB.SCK0.C01B) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP28, 0x1C, 0x00000510, 0x06)
+        Processor (CP29, 0x1D, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 29)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR28))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR28) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C01C))
+                Else
                 {
-                    Return (\_SB.SCK0.C01C) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP29, 0x1D, 0x00000510, 0x06)
+        Processor (CP30, 0x1E, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 30)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR29))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR29) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C01D))
+                Else
                 {
-                    Return (\_SB.SCK0.C01D) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP30, 0x1E, 0x00000510, 0x06)
+        Processor (CP31, 0x1F, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 31)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR30))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR30) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C01E))
+                Else
                 {
-                    Return (\_SB.SCK0.C01E) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP31, 0x1F, 0x00000510, 0x06)
+        Processor (CP32, 0x20, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 32)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR31))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR31) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C01F))
+                Else
                 {
-                    Return (\_SB.SCK0.C01F) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP32, 0x20, 0x00000510, 0x06)
+        Processor (CP33, 0x21, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 33)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR32))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR32) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C020))
+                Else
                 {
-                    Return (\_SB.SCK0.C020) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP33, 0x21, 0x00000510, 0x06)
+        Processor (CP34, 0x22, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 34)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR33))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR33) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C021))
+                Else
                 {
-                    Return (\_SB.SCK0.C021) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP34, 0x22, 0x00000510, 0x06)
+        Processor (CP35, 0x23, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 35)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR34))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR34) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C022))
+                Else
                 {
-                    Return (\_SB.SCK0.C022) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP35, 0x23, 0x00000510, 0x06)
+        Processor (CP36, 0x24, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 36)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR35))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR35) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C023))
+                Else
                 {
-                    Return (\_SB.SCK0.C023) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP36, 0x24, 0x00000510, 0x06)
+        Processor (CP37, 0x25, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 37)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR36))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR36) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C024))
+                Else
                 {
-                    Return (\_SB.SCK0.C024) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP37, 0x25, 0x00000510, 0x06)
+        Processor (CP38, 0x26, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 38)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR37))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR37) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C025))
+                Else
                 {
-                    Return (\_SB.SCK0.C025) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP38, 0x26, 0x00000510, 0x06)
+        Processor (CP39, 0x27, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 39)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR38))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR38) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C026))
+                Else
                 {
-                    Return (\_SB.SCK0.C026) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP39, 0x27, 0x00000510, 0x06)
+        Processor (CP40, 0x28, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 40)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR39))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR39) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C027))
+                Else
                 {
-                    Return (\_SB.SCK0.C027) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP40, 0x28, 0x00000510, 0x06)
+        Processor (CP41, 0x29, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 41)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR40))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR40) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C028))
+                Else
                 {
-                    Return (\_SB.SCK0.C028) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP41, 0x29, 0x00000510, 0x06)
+        Processor (CP42, 0x2A, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 42)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR41))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR41) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C029))
+                Else
                 {
-                    Return (\_SB.SCK0.C029) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP42, 0x2A, 0x00000510, 0x06)
+        Processor (CP43, 0x2B, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 43)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR42))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR42) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C02A))
+                Else
                 {
-                    Return (\_SB.SCK0.C02A) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP43, 0x2B, 0x00000510, 0x06)
+        Processor (CP44, 0x2C, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 44)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR43))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR43) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C02B))
+                Else
                 {
-                    Return (\_SB.SCK0.C02B) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP44, 0x2C, 0x00000510, 0x06)
+        Processor (CP45, 0x2D, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 45)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR44))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR44) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C02C))
+                Else
                 {
-                    Return (\_SB.SCK0.C02C) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP45, 0x2D, 0x00000510, 0x06)
+        Processor (CP46, 0x2E, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 46)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR45))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR45) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C02D))
+                Else
                 {
-                    Return (\_SB.SCK0.C02D) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP46, 0x2E, 0x00000510, 0x06)
+        Processor (CP47, 0x2F, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 47)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR46))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR46) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C02E))
+                Else
                 {
-                    Return (\_SB.SCK0.C02E) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP47, 0x2F, 0x00000510, 0x06)
+        Processor (CP48, 0x30, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 48)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR47))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR47) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C02F))
+                Else
                 {
-                    Return (\_SB.SCK0.C02F) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP48, 0x30, 0x00000510, 0x06)
+        Processor (CP49, 0x31, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 49)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR48))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR48) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C030))
+                Else
                 {
-                    Return (\_SB.SCK0.C030) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP49, 0x31, 0x00000510, 0x06)
+        Processor (CP50, 0x32, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 50)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR49))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR49) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C031))
+                Else
                 {
-                    Return (\_SB.SCK0.C031) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP50, 0x32, 0x00000510, 0x06)
+        Processor (CP51, 0x33, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 51)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR50))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR50) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C032))
+                Else
                 {
-                    Return (\_SB.SCK0.C032) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP51, 0x33, 0x00000510, 0x06)
+        Processor (CP52, 0x34, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 52)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR51))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR51) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C033))
+                Else
                 {
-                    Return (\_SB.SCK0.C033) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP52, 0x34, 0x00000510, 0x06)
+        Processor (CP53, 0x35, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 53)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR52))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR52) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C034))
+                Else
                 {
-                    Return (\_SB.SCK0.C034) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP53, 0x35, 0x00000510, 0x06)
+        Processor (CP54, 0x36, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 54)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR53))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR53) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C035))
+                Else
                 {
-                    Return (\_SB.SCK0.C035) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP54, 0x36, 0x00000510, 0x06)
+        Processor (CP55, 0x37, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 55)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR54))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR54) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C036))
+                Else
                 {
-                    Return (\_SB.SCK0.C036) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP55, 0x37, 0x00000510, 0x06)
+        Processor (CP56, 0x38, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 56)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR55))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR55) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C037))
+                Else
                 {
-                    Return (\_SB.SCK0.C037) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP56, 0x38, 0x00000510, 0x06)
+        Processor (CP57, 0x39, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 57)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR56))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR56) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C038))
+                Else
                 {
-                    Return (\_SB.SCK0.C038) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP57, 0x39, 0x00000510, 0x06)
+        Processor (CP58, 0x3A, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 58)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR57))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR57) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C039))
+                Else
                 {
-                    Return (\_SB.SCK0.C039) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP58, 0x3A, 0x00000510, 0x06)
+        Processor (CP59, 0x3B, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 59)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR58))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR58) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C03A))
+                Else
                 {
-                    Return (\_SB.SCK0.C03A) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP59, 0x3B, 0x00000510, 0x06)
+        Processor (CP60, 0x3C, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 60)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR59))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR59) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C03B))
+                Else
                 {
-                    Return (\_SB.SCK0.C03B) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP60, 0x3C, 0x00000510, 0x06)
+        Processor (CP61, 0x3D, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 61)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR60))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR60) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C03C))
+                Else
                 {
-                    Return (\_SB.SCK0.C03C) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP61, 0x3D, 0x00000510, 0x06)
+        Processor (CP62, 0x3E, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 62)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR61))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR61) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C03D))
+                Else
                 {
-                    Return (\_SB.SCK0.C03D) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
+        }
 
-            Processor (CP62, 0x3E, 0x00000510, 0x06)
+        Processor (CP63, 0x3F, 0x00000510, 0x06)
+        {
+            Name (_HID, "ACPI0007" /* Processor Device */)
+            Name (_UID, 63)
+            Method (_STA, 0, NotSerialized)  // _STA: Status
             {
-                If (CondRefOf (\_SB.PR62))
+                If (_OSI ("Darwin"))
                 {
-                    Return (\_SB.PR62) /* External reference */
+                    Return (0x0F)
                 }
-
-                If (CondRefOf (\_SB.SCK0.C03E))
+                Else
                 {
-                    Return (\_SB.SCK0.C03E) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
-                }
-            }
-
-            Processor (CP63, 0x3F, 0x00000510, 0x06)
-            {
-                If (CondRefOf (\_SB.PR63))
-                {
-                    Return (\_SB.PR63) /* External reference */
-                }
-
-                If (CondRefOf (\_SB.SCK0.C03F))
-                {
-                    Return (\_SB.SCK0.C03F) /* External reference */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (MO86 ())
+                    Return (Zero)
                 }
             }
         }
